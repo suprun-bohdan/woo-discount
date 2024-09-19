@@ -150,13 +150,16 @@ class Woo_Discount {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks(): void
+    {
 
 		$plugin_admin = new Woo_Discount_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+        $this->loader->add_action( 'woocommerce_product_options_general_product_data', $plugin_admin, 'add_dynamic_discount_fields' );
+        $this->loader->add_action( 'woocommerce_process_product_meta', $plugin_admin, 'save_dynamic_discount_fields' );
 	}
 
 	/**
@@ -166,13 +169,15 @@ class Woo_Discount {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks(): void
+    {
 
 		$plugin_public = new Woo_Discount_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+        $this->loader->add_action( 'woocommerce_before_calculate_totals', $plugin_public, 'apply_dynamic_discounts' );
 	}
 
 	/**
@@ -191,7 +196,8 @@ class Woo_Discount {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name(): string
+    {
 		return $this->plugin_name;
 	}
 
@@ -201,7 +207,8 @@ class Woo_Discount {
 	 * @since     1.0.0
 	 * @return    Woo_Discount_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader(): Woo_Discount_Loader
+    {
 		return $this->loader;
 	}
 
