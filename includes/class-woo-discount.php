@@ -158,7 +158,6 @@ class Woo_Discount {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-        $this->loader->add_action( 'woocommerce_product_options_general_product_data', $plugin_admin, 'add_dynamic_discount_fields' );
         $this->loader->add_action( 'woocommerce_process_product_meta', $plugin_admin, 'save_dynamic_discount_fields' );
 	}
 

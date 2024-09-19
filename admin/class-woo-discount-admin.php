@@ -54,6 +54,8 @@ class Woo_Discount_Admin
         $this->plugin_name = $plugin_name;
         $this->version = $version;
 
+        add_filter('woocommerce_product_data_tabs', array($this, 'add_dynamic_discount_tab'));
+        add_action('woocommerce_product_data_panels', array($this, 'add_dynamic_discount_fields_panel'));
     }
 
     /**
@@ -104,13 +106,22 @@ class Woo_Discount_Admin
 
     }
 
-    public function add_dynamic_discount_fields(): void
-    {
-        global $post;
-
-        include plugin_dir_path(__FILE__) . './partials/woo-discount-admin-section.php';
+    public function add_dynamic_discount_tab($tabs) {
+        $tabs['dynamic_discounts'] = array(
+            'label'    => __('Dynamic Discounts', 'woo-discount'),
+            'target'   => 'dynamic_discounts_data',
+            'class'    => array('show_if_simple', 'show_if_variable'),
+            'priority' => 21,
+        );
+        return $tabs;
     }
 
+    public function add_dynamic_discount_fields_panel(): void
+    {
+        echo '<div id="dynamic_discounts_data" class="panel woocommerce_options_panel hidden">';
+        include plugin_dir_path(__FILE__) . 'partials/woo-discount-admin-section.php';
+        echo '</div>';
+    }
 
     public function save_dynamic_discount_fields($post_id): void
     {
