@@ -112,12 +112,21 @@ class Woo_Discount_Public
             $price = $cart_item['data']->get_price();
 
             $discounts = get_post_meta($product_id, '_dynamic_discounts', true);
+
             if (!empty($discounts) && is_array($discounts)) {
                 $applicable_discount = 0;
 
                 foreach ($discounts as $required_quantity => $percentage) {
-                    if ($quantity >= $required_quantity) {
-                        $applicable_discount = max($applicable_discount, $percentage);
+                    if (!is_numeric($required_quantity) || intval($required_quantity) <= 0) {
+                        continue;
+                    }
+
+                    if (!is_numeric($percentage) || $percentage < 0 || $percentage > 100) {
+                        continue;
+                    }
+
+                    if ($quantity >= intval($required_quantity)) {
+                        $applicable_discount = max($applicable_discount, floatval($percentage));
                     }
                 }
 
@@ -128,4 +137,5 @@ class Woo_Discount_Public
             }
         }
     }
+
 }

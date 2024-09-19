@@ -1,32 +1,34 @@
 (function( $ ) {
 	'use strict';
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+	$(function() {
+		const addDiscountBtn = $('#add_discount_level');
+		const discountFieldsContainer = $('#dynamic_discount_fields');
+
+
+		addDiscountBtn.on('click', function(e) {
+			e.preventDefault();
+
+			const newField = `
+			<div class="discount_block">
+				<p class="form-field _quantity_field ">
+					<label for="dynamic_discount_quantity[]">Кількість одиниць</label>
+					<input type="number" class="short wc_input_price" name="dynamic_discount_quantity[]" placeholder="Кількість одиниць" min="1">
+				</p>
+				<p class="form-field _percentage_field ">
+					<label for="dynamic_discount_percentage[]">Відсоток знижки</label>
+					<input type="number" class="short wc_input_price" name="dynamic_discount_percentage[]" placeholder="Відсоток знижки" min="0" max="100" step="1">
+					<a href="#" class="remove_discount">Видалити</a>
+				</p>
+			</div>`;
+
+			discountFieldsContainer.append(newField);
+		});
+
+		discountFieldsContainer.on('click', '.remove_discount', function(e) {
+			e.preventDefault();
+			$(this).closest('.discount_block').remove();
+		});
+	});
 
 })( jQuery );
